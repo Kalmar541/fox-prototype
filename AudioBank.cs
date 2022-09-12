@@ -1,9 +1,14 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine; 
 
 public class AudioBank : MonoBehaviour
 {
+    /* Класс хранит озвучку для эффектов.
+     * Звуковые эффекты, которые создаются вместе с игровыми обьектами при инициализации или во время их существования,
+     * могут находиться на самих GO. Озвучка фоновой музыки хранится здесь. Обьекты, которые будут механикой игры уничтожены,
+     * помещаются сюда и проигрываются здесь.
+     */
     public AudioClip soundEndWon;
     public AudioClip GameSound;
     public AudioClip soundPlayerFall;

@@ -1,25 +1,32 @@
-using UnityEngine;
+п»їusing UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour 
+
 {
-    public int playerLives = 1;         // жизни игрока
+    /*
+     * РЈРїСЂР°РІР»СЏРµС‚ РґРІРёР¶РµРЅРёРµРј РёРіСЂРѕРєР°, СЃРјРµРЅРѕР№ Р°РЅРёРјР°С†РёРё.
+     * Р–РёР·РЅРё РёРіСЂРѕРєР° РѕС‚РЅРёРјР°СЋС‚ РІР·СЂС‹РІС‹ Р±РѕРјР±, РїР°РґРµРЅРёРµ Р·Р° РїСЂРµРґРµР»С‹ СЌРєСЂР°РЅР° Р·Р°РІРµСЂС€Р°СЋС‚ РёРіСЂСѓ.
+     * РРіСЂРѕРє РїСЂС‹Р¶РєР°РјРё РѕС‚С‚Р°Р»РєРёРІР°РµС‚ РїР°РґР°СЋС‰РёРµ Р±РѕРјР±С‹ РІ BOSSР°. СѓРїР°РІС€РёРµ РЅР° Р·РµРјР»СЋ РјРѕР¶РµС‚ СЃС‚Р°Р»РєРёРІР°С‚СЊ Р·Р° СЃС†РµРЅСѓ.
+     * 
+     */
+    public int playerLives = 1;         // Р¶РёР·РЅРё РёРіСЂРѕРєР°
 
-    public float speed = 10;            // скорость игрока
-    public float jumpForceTest = 1;     // сила прыжка
-    public float cancelRate = 100;      // сила приземляющая игрока после прыжка
-    public float buttonTime=0.5f;       // длинна прыжка по времени максимальная
-    float timeJump;                     // время , которое игрок держит конпку прыжка
+    public float speed = 10;            // СЃРєРѕСЂРѕСЃС‚СЊ РёРіСЂРѕРєР°
+    public float jumpForceTest = 1;     // СЃРёР»Р° РїСЂС‹Р¶РєР°
+    public float cancelRate = 100;      // СЃРёР»Р° РїСЂРёР·РµРјР»СЏСЋС‰Р°СЏ РёРіСЂРѕРєР° РїРѕСЃР»Рµ РїСЂС‹Р¶РєР°
+    public float buttonTime=0.5f;       // РґР»РёРЅРЅР° РїСЂС‹Р¶РєР° РїРѕ РІСЂРµРјРµРЅРё РјР°РєСЃРёРјР°Р»СЊРЅР°СЏ
+    float timeJump;                     // РІСЂРµРјСЏ , РєРѕС‚РѕСЂРѕРµ РёРіСЂРѕРє РґРµСЂР¶РёС‚ РєРѕРЅРїРєСѓ РїСЂС‹Р¶РєР°
 
-    Rigidbody rb;                       //физ. тело
+    Rigidbody rb;                       //С„РёР·. С‚РµР»Рѕ
     public SpriteRenderer sprite;
     public Animator anim;
 
      bool jumpCancelled;
-     bool isJump;                 // игрок прыгает , для fixedupfate
-     bool is_ground;              //проверка на касание земли
+     bool isJump;                 // РёРіСЂРѕРє РїСЂС‹РіР°РµС‚ , РґР»СЏ fixedupfate
+     bool is_ground;              //РїСЂРѕРІРµСЂРєР° РЅР° РєР°СЃР°РЅРёРµ Р·РµРјР»Рё
 
     AudioSource AudioSource;
-    public AudioClip jump;              // звук прыжка
+    public AudioClip jump;              // Р·РІСѓРє РїСЂС‹Р¶РєР°
  
     // Start is called before the first frame update
     void Start()
@@ -33,7 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         ChangeAnimations();
 
-        //----ввод клавиш, управление-----
+        //----РІРІРѕРґ РєР»Р°РІРёС€, СѓРїСЂР°РІР»РµРЅРёРµ-----
         if (Input.GetKeyDown(KeyCode.UpArrow)&&is_ground)
         {
             float jumpForce = /*Mathf.Sqrt(*/jumpForceTest * -2 * Physics.gravity.y/*)*/;
@@ -55,10 +62,10 @@ public class PlayerController : MonoBehaviour
                 isJump = false;
             }
         }
-        // если жизни кончились, включить кнопки "рестарт меню" а модель игрока деактивировать
+        // РµСЃР»Рё Р¶РёР·РЅРё РєРѕРЅС‡РёР»РёСЃСЊ, РІРєР»СЋС‡РёС‚СЊ РєРЅРѕРїРєРё "СЂРµСЃС‚Р°СЂС‚ РјРµРЅСЋ" Р° РјРѕРґРµР»СЊ РёРіСЂРѕРєР° РґРµР°РєС‚РёРІРёСЂРѕРІР°С‚СЊ
 
-        //------работа со сценой------
-        if (playerLives<1) //предложить рестар если проиграл
+        //------СЂР°Р±РѕС‚Р° СЃРѕ СЃС†РµРЅРѕР№------
+        if (playerLives<1) //РїСЂРµРґР»РѕР¶РёС‚СЊ СЂРµСЃС‚Р°СЂ РµСЃР»Рё РїСЂРѕРёРіСЂР°Р»
         {
             AudioBank AB =  Camera.main.GetComponent<AudioBank>()  ; 
             
@@ -68,7 +75,7 @@ public class PlayerController : MonoBehaviour
             Camera.main.GetComponent<UI>().restartMenuGO.SetActive(true);
             gameObject.SetActive(false);
         }
-        //вернем игрока на сцену если он упал и отнимем жизнь
+        //РІРµСЂРЅРµРј РёРіСЂРѕРєР° РЅР° СЃС†РµРЅСѓ РµСЃР»Рё РѕРЅ СѓРїР°Р» Рё РѕС‚РЅРёРјРµРј Р¶РёР·РЅСЊ
         if (transform.position.y < -20)
         {           
                 //transform.position = Vector3.zero;
@@ -81,7 +88,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         MoveHorizontal();
-     //------ввод клавиш-----
+     //------РІРІРѕРґ РєР»Р°РІРёС€-----
         if (Input.GetKey(KeyCode.UpArrow))
         {        
             if (!is_ground)
@@ -97,7 +104,7 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        //ускоренное приземление
+        //СѓСЃРєРѕСЂРµРЅРЅРѕРµ РїСЂРёР·РµРјР»РµРЅРёРµ
         if (jumpCancelled && isJump && rb.velocity.y > 0|| timeJump > buttonTime)
         {
             rb.AddForce(Vector3.down * cancelRate);
@@ -112,8 +119,8 @@ public class PlayerController : MonoBehaviour
     }
     void ChangeAnimations()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal"); // Меняем анимацию с
-        //-----работа анимации-----
+        float moveHorizontal = Input.GetAxis("Horizontal"); 
+        //-----РёР·РјРµРЅРµРЅРёРµ СЃРѕСЃС‚Р°СЏРЅРёСЏ Р°РЅРёРјР°С†РёРё-----
         if (Mathf.Abs(moveHorizontal) > 0.1)
         {
             anim.SetBool("run", true);
@@ -134,7 +141,7 @@ public class PlayerController : MonoBehaviour
             sprite.flipX = false;
         }
     }
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionStay(Collision collision) // РїСЂРѕРІРµСЂРєР° РЅР° РєР°СЃР°РЅРёРµ Р·РµРјР»Рё, РґР»СЏ РёСЃРєР»СЋС‡РµРЅРёСЏ РґРІРѕР№РЅРѕРіРѕ РїСЂС‹Р¶РєР° РІ РІРѕС…РґСѓС…Рµ.
     {
         if (collision.gameObject.CompareTag("Ground"))
         {

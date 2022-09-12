@@ -1,32 +1,44 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+ 
 public class Boss : MonoBehaviour
-{  
+{  /*
+    * РЎРєСЂРёРїС‚ РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ Р‘РѕСЃСЃРѕРј. Р‘РѕСЃСЃ РґРІРёР¶РµС‚СЃСЏ РІР»РµРІРѕ Рё РІРїСЂР°РІРѕ РЅР°Рґ РёРіСЂРѕРєРѕРј Рё СЃР±СЂР°СЃС‹РІР°РµС‚ Р±РѕРјР±С‹,
+    * РєРѕС‚РѕСЂС‹Рµ РґРѕР»Р¶РЅС‹ РІР·СЂС‹РІРѕРј Р»РёР±Рѕ Р·Р°РґРµС‚СЊ РёРіСЂРѕРєР° Р»РёР±Рѕ СЂР°Р·СЂСѓР¶РёС‚СЊ РѕСЃРЅРѕРІР°РЅРёРµ РїРѕРґ РЅРёРј. Р‘РѕСЃСЃ РїРѕР±РµР¶РґРµРЅ,
+    * РµСЃР»Рё Сѓ РЅРµРіРѕ Р·Р°РєРѕРЅС‡РёР»РёСЃСЊ Р¶РёР·РЅРё Рё РїР°РґР°РµС‚ РІРЅРёР·.
     
-    public GameObject applePrefab;                  //шаблон создания яблок
+    * РћР±СЊРµРєС‚ Boss РґРѕС…РѕРґРёС‚ РґРѕ РєСЂР°СЏ СЌРєСЂР°РЅР° Рё СЂР°Р·РІРѕСЂР°С‡РёРІР°РµС‚СЃСЏ, РµСЃС‚СЊ С€Р°РЅСЃ СЃР»СѓС‡Р°Р№РЅРѕРіРѕ РёР·РјРµРЅРµРЅРёСЏ 
+    * РЅР°РїСЂР°РІР»РµРЅРёСЏ РґРІРёР¶РµРЅРёСЏ. Р‘РѕРјР±С‹ СЃРѕР·РґР°СЋС‚СЃСЏ С‡РµСЂРµР· РѕРїСЂРµРґРµР»РµРЅРЅРѕРµ РІСЂРµРјСЏ, РїР°РґР°СЋС‚ РІРЅРёР· Рё СѓРЅРёС‡С‚РѕР¶Р°СЋС‚ РѕСЃРЅРѕРІР°РЅРёРµ РїРѕРґ СЃРѕР±РѕР№
+    * РёР»Рё/Рё СЂР°РЅСЏС‚ РёРіСЂРѕРєР°. 
+    * BOSS РїР°РґР°РµС‚ РІРЅРёР· РµСЃР»Рё Сѓ РЅРµРіРѕ Р·Р°РєРѕРЅС‡РёР»РёСЃСЊ Р¶РёР·РЅРё. 
+    * TODO - СЃ РёР·РјРµРЅРµРЅРёРµРј СЃР»РѕР¶РЅРѕСЃС‚Рё BOSS РґРѕР»Р¶Рµ РјРµРЅСЏС‚СЊ СЃРїСЂР°Р№С‚ РЅР° Р±РѕР»РµРµ РІРЅСѓС€РёС‚РµР»СЊРЅС‹Р№, РґРІРёРіР°С‚СЊСЃСЏ Р±С‹СЃС‚СЂРµРµ, Р±С‹СЃС‚СЂРµРµ СЃРєРёРґС‹РІР°С‚СЊ Р±РѕРјР±С‹.
+    * BOSS РїР°РґР°РµС‚ РІРЅРёР· РµСЃР»Рё Сѓ РЅРµРіРѕ Р·Р°РєРѕРЅС‡РёР»РёСЃСЊ Р¶РёР·РЅРё, РґРµР°РєС‚РёРІРёСЂСѓРµС‚СЃСЏ РЅР° СЃС†РµРЅРµ, РµРјСѓ Р·Р°РјРµРЅСЏРµС‚СЃСЏ СЃРїСЂР°Р№С‚, РјРµРЅСЏСЋС‚СЃСЏ РїРѕР»СЏ Рё РѕРЅ СЃРЅРѕРІР° РїРѕРјРµС‰Р°РµС‚СЃСЏ 
+    * РЅР°Рґ РёРіСЂРѕРєРѕРј Рё С‚Р°Рє РїРѕРєР° РїРѕСЃР»РµРґРЅРёР№ Р±РѕСЃСЃ РЅРµ Р±СѓРґРµС‚ РїРѕРІРµСЂР¶РµРЅ.
+    */
+
+    public GameObject bombPrefab;                  //С€Р°Р±Р»РѕРЅ СЃРѕР·РґР°РЅРёСЏ СЏР±Р»РѕРє
     public float speed = 1f;
-    public float leftAndRightEdge = 10f;            //растояние на котором должноизменяться направление движения яблони 
-    public float chanceToChangeDirections = 0.1f;   //вероятность случайного изменения движения   
-    public float secondsBetweenDropApple = 2f;      //частота сброса яблок
+    public float leftAndRightEdge = 10f;            //СЂР°СЃС‚РѕСЏРЅРёРµ РЅР° РєРѕС‚РѕСЂРѕРј РґРѕР»Р¶РЅРѕРёР·РјРµРЅСЏС‚СЊСЃСЏ РЅР°РїСЂР°РІР»РµРЅРёРµ РґРІРёР¶РµРЅРёСЏ СЏР±Р»РѕРЅРё 
+    public float chanceToChangeDirections = 0.1f;   //РІРµСЂРѕСЏС‚РЅРѕСЃС‚СЊ СЃР»СѓС‡Р°Р№РЅРѕРіРѕ РёР·РјРµРЅРµРЅРёСЏ РґРІРёР¶РµРЅРёСЏ   
+    public float secondsBetweenDropApple = 2f;      //С‡Р°СЃС‚РѕС‚Р° СЃР±СЂРѕСЃР° СЏР±Р»РѕРє
     public int lives=1;
-    bool beginDownOnce = true;                      // флаг по которому BOSS падает вниз
-    public float timeOnChange = 1f;                 // таймер ожидания после смены движения
-    public GameObject animExplousions;              // анимация взрывов
+    bool beginDownOnce = true;                      // С„Р»Р°Рі РїРѕ РєРѕС‚РѕСЂРѕРјСѓ BOSS РїР°РґР°РµС‚ РІРЅРёР·
+    public float timeOnChange = 1f;                 // С‚Р°Р№РјРµСЂ РѕР¶РёРґР°РЅРёСЏ РїРѕСЃР»Рµ СЃРјРµРЅС‹ РґРІРёР¶РµРЅРёСЏ
+    public GameObject animExplousions;              // Р°РЅРёРјР°С†РёСЏ РІР·СЂС‹РІРѕРІ
     public SpriteRenderer sprite;
 
     void Start()
     {        
-        //сбрасывать яблоки раз в секунду
+        //СЃР±СЂР°СЃС‹РІР°С‚СЊ СЏР±Р»РѕРєРё СЂР°Р· РІ СЃРµРєСѓРЅРґСѓ
         Invoke("DropApple", 2f);       
         capsColl = GetComponent<CapsuleCollider>();
     }
   
     void Update()
     {           
-        //простое перемещение
+        //РїСЂРѕСЃС‚РѕРµ РїРµСЂРµРјРµС‰РµРЅРёРµ
         Vector3 pos = transform.position;
         pos.x += speed * Time.deltaTime;
         
@@ -35,19 +47,19 @@ public class Boss : MonoBehaviour
             pos.y -=Mathf.Abs( speed) * Time.deltaTime;  
             if ( beginDownOnce)
             {
-                AnimBossDead(); // сработает 1 раз
+                AnimBossDead(); // СЃСЂР°Р±РѕС‚Р°РµС‚ 1 СЂР°Р·
                 beginDownOnce = false;
             }            
         }
         transform.position = pos;
-        //изменение направления, с ожиданием задержки, что бы обьект не дергался сразу после
-        //смены направления если шанс смены направления опять выпал
+        //РёР·РјРµРЅРµРЅРёРµ РЅР°РїСЂР°РІР»РµРЅРёСЏ, СЃ РѕР¶РёРґР°РЅРёРµРј Р·Р°РґРµСЂР¶РєРё, С‡С‚Рѕ Р±С‹ РѕР±СЊРµРєС‚ РЅРµ РґРµСЂРіР°Р»СЃСЏ СЃСЂР°Р·Сѓ РїРѕСЃР»Рµ
+        //СЃРјРµРЅС‹ РЅР°РїСЂР°РІР»РµРЅРёСЏ РµСЃР»Рё С€Р°РЅСЃ СЃРјРµРЅС‹ РЅР°РїСЂР°РІР»РµРЅРёСЏ РѕРїСЏС‚СЊ РІС‹РїР°Р»
         if (timeOnChange>0)
         {
             timeOnChange -=Time.deltaTime;
         }
         
-        //BOSS двигается влево и вправо пока не достигнет крайних на экране позиций, после чего разворачивается
+        //BOSS РґРІРёРіР°РµС‚СЃСЏ РІР»РµРІРѕ Рё РІРїСЂР°РІРѕ РїРѕРєР° РЅРµ РґРѕСЃС‚РёРіРЅРµС‚ РєСЂР°Р№РЅРёС… РЅР° СЌРєСЂР°РЅРµ РїРѕР·РёС†РёР№, РїРѕСЃР»Рµ С‡РµРіРѕ СЂР°Р·РІРѕСЂР°С‡РёРІР°РµС‚СЃСЏ
         if (pos.x < -leftAndRightEdge&&timeOnChange<=0)
         {           
             speed *=-1;
@@ -82,31 +94,31 @@ public class Boss : MonoBehaviour
     
     void DropApple()
     {
-        GameObject apple = Instantiate<GameObject>(applePrefab);
+        GameObject apple = Instantiate<GameObject>(bombPrefab);
         apple.transform.position = transform.position;
         Invoke("DropApple", secondsBetweenDropApple);
         
     }
     public CapsuleCollider capsColl;
     
-     void AnimBossDead() { //спавнит взрывы вокруг BOSSа когда он уничтожен
+     void AnimBossDead() { //СЃРїР°РІРЅРёС‚ РІР·СЂС‹РІС‹ РІРѕРєСЂСѓРі BOSSР° РєРѕРіРґР° РѕРЅ СѓРЅРёС‡С‚РѕР¶РµРЅ
 
-        CancelInvoke("DropApple"); // прекратить сброс бомб
-        Vector3 centrPoint = transform.position;     // позиция в которой находится BOSS  
-        float radius = 4; // радиус разброса анимаций взрывов
-        //выбрать точку анимации взрыва вокруг BOSSа
+        CancelInvoke("DropApple"); // РїСЂРµРєСЂР°С‚РёС‚СЊ СЃР±СЂРѕСЃ Р±РѕРјР±
+        Vector3 centrPoint = transform.position;     // РїРѕР·РёС†РёСЏ РІ РєРѕС‚РѕСЂРѕР№ РЅР°С…РѕРґРёС‚СЃСЏ BOSS  
+        float radius = 4; // СЂР°РґРёСѓСЃ СЂР°Р·Р±СЂРѕСЃР° Р°РЅРёРјР°С†РёР№ РІР·СЂС‹РІРѕРІ
+        //РІС‹Р±СЂР°С‚СЊ С‚РѕС‡РєСѓ Р°РЅРёРјР°С†РёРё РІР·СЂС‹РІР° РІРѕРєСЂСѓРі BOSSР°
         Vector3 randomPos = new Vector3(Random.value-0.5f, Random.value-0.5f, 0).normalized*radius+centrPoint;
-        Vector3 pos = new Vector3(0,0,2.9f); // подвинуть координату Z что бы спрайт взрыва перекрывал спрайт BOSSа
+        Vector3 pos = new Vector3(0,0,2.9f); // РїРѕРґРІРёРЅСѓС‚СЊ РєРѕРѕСЂРґРёРЅР°С‚Сѓ Z С‡С‚Рѕ Р±С‹ СЃРїСЂР°Р№С‚ РІР·СЂС‹РІР° РїРµСЂРµРєСЂС‹РІР°Р» СЃРїСЂР°Р№С‚ BOSSР°
         Instantiate(animExplousions, randomPos+pos,Quaternion.identity);
         Invoke("AnimBossDead", 0.33f); 
     }
-    private void OnTriggerEnter(Collider other) // считает попадания бомб которые откинули
+    private void OnTriggerEnter(Collider other) // СЃС‡РёС‚Р°РµС‚ РїРѕРїР°РґР°РЅРёСЏ Р±РѕРјР± РєРѕС‚РѕСЂС‹Рµ РѕС‚РєРёРЅСѓР»Рё
     {
         if (other.gameObject.tag == "Apple" && other.gameObject.GetComponent<Bomb>().is_activateExplousion == true)
         {
             lives--;
             Vector3 tempPos=other.transform.position ;
-            GameObject go = Instantiate(animExplousions); // проиграть анимацию взрыва
+            GameObject go = Instantiate(animExplousions); // РїСЂРѕРёРіСЂР°С‚СЊ Р°РЅРёРјР°С†РёСЋ РІР·СЂС‹РІР°
             go.transform.position = tempPos;
             Destroy(other.gameObject);
         }

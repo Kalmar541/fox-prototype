@@ -1,36 +1,41 @@
-using System.Collections;
+п»їusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-
+ 
 public class UI : MonoBehaviour
 {
 
-    // Класс управляет элементами на канвасе, текстом, кнопками.
+    /* РљР»Р°СЃСЃ СѓРїСЂР°РІР»СЏРµС‚ СЌР»РµРјРµРЅС‚Р°РјРё РЅР° РєР°РЅРІР°СЃРµ, С‚РµРєСЃС‚РѕРј, РєРЅРѕРїРєР°РјРё.
+     * РЎС‚Р°СЂС‚РѕРІС‹Р№ С‚РµРєСЃС‚ РїРѕСЏРІР»СЏРµС‚СЃСЏ РїРµСЂРІС‹Рј РЅР° СЌРєСЂР°РЅРµ, РѕРЅ РѕР±СЊСЏСЃРЅСЏРµС‚ РїСЂР°РІРёР»Р° Рё СѓРїСЂР°РІР»РµРЅРёРµ, РїСЂРѕРїР°РґР°РµС‚ РїРѕ РЅР°Р¶Р°С‚РёСЋ Р»СЋР±РѕР№ РєР»Р°РІРёС€Рё.
+     * РќР° Canvas СЃРіСЂСѓРїРїРёСЂРѕРІР°РЅС‹ СЌР»РµРјРµРЅС‚С‹ РјРµРЅСЋ-РїР°СѓР·С‹( 3 РєРЅРѕРїРєРё: РІРµСЂРЅСѓС‚СЊСЃСЏ, СЂРµСЃС‚Р°СЂС‚ Рё РІС‹С…РѕРґ) - Р°РєС‚РёРІРёСЂСѓРµС‚СЃСЏ РЅР°Р¶Р°С‚РёРµРј РєРЅРѕРїРєРё ESC.
+     * Р СЂРµСЃС‚Р°СЂС‚Р°(РєРЅРѕРїРєР° СЂРµСЃС‚Р°СЂС‚ РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ РїРѕ РѕРєРѕРЅС‡РёРЅРёРё РёРіСЂС‹).
+     *  
+     */
 
-    public GameObject restartMenuGO; // группа показывается при окончании игры
-    public GameObject escapeMenuGO;  // группа меню паузы с кпопками выхода рестарта и возврата
+    public GameObject restartMenuGO; // РіСЂСѓРїРїР° РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РѕРєРѕРЅС‡Р°РЅРёРё РёРіСЂС‹
+    public GameObject escapeMenuGO;  // РіСЂСѓРїРїР° РјРµРЅСЋ РїР°СѓР·С‹ СЃ РєРїРѕРїРєР°РјРё РІС‹С…РѕРґР° СЂРµСЃС‚Р°СЂС‚Р° Рё РІРѕР·РІСЂР°С‚Р°
     public GameObject player;
     public GameObject bossGO;
     public PlayerController basketScript;
     public Boss appleTreeScript;
     public AudioBank auduoBankScript;
     
-    public GameObject startingTxt;   // текст при старте игры, описывающий элементы управления
+    public GameObject startingTxt;   // С‚РµРєСЃС‚ РїСЂРё СЃС‚Р°СЂС‚Рµ РёРіСЂС‹, РѕРїРёСЃС‹РІР°СЋС‰РёР№ СЌР»РµРјРµРЅС‚С‹ СѓРїСЂР°РІР»РµРЅРёСЏ
     public TMPro.TextMeshProUGUI playerLivesTMP;
     public TMPro.TextMeshProUGUI bossLivesTMP;
     public TMPro.TextMeshProUGUI textGameOverTMP;
 
-    public bool GameIsWIN;           // флаг указывающий на победу в игре
-    public bool escapeVisible;       // флаг видимости меню паузы
-    float timeScaleActual;           // хранит скорость игры, что бы вернуть ее после паузы.
+    public bool GameIsWIN;           // С„Р»Р°Рі СѓРєР°Р·С‹РІР°СЋС‰РёР№ РЅР° РїРѕР±РµРґСѓ РІ РёРіСЂРµ
+    public bool escapeVisible;       // С„Р»Р°Рі РІРёРґРёРјРѕСЃС‚Рё РјРµРЅСЋ РїР°СѓР·С‹
+    float timeScaleActual;           // С…СЂР°РЅРёС‚ СЃРєРѕСЂРѕСЃС‚СЊ РёРіСЂС‹, С‡С‚Рѕ Р±С‹ РІРµСЂРЅСѓС‚СЊ РµРµ РїРѕСЃР»Рµ РїР°СѓР·С‹.
     void Start()
     {
         escapeVisible = escapeMenuGO.activeSelf;
         timeScaleActual = Time.timeScale;
-        Time.timeScale = 0; // даем игроку прочитать стартовый текст, игра на паузе
+        Time.timeScale = 0; // РґР°РµРј РёРіСЂРѕРєСѓ РїСЂРѕС‡РёС‚Р°С‚СЊ СЃС‚Р°СЂС‚РѕРІС‹Р№ С‚РµРєСЃС‚, РёРіСЂР° РЅР° РїР°СѓР·Рµ
         basketScript = player.GetComponent<PlayerController>();
         appleTreeScript = bossGO.GetComponent<Boss>();
         auduoBankScript = GetComponent<AudioBank>();
@@ -41,58 +46,58 @@ public class UI : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   // GameIsWIN устанавливается на true если игра закончена победой
-        if (GameIsWIN) //заменим текс на победный если игрок выиграл
+    {   // GameIsWIN СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ РЅР° true РµСЃР»Рё РёРіСЂР° Р·Р°РєРѕРЅС‡РµРЅР° РїРѕР±РµРґРѕР№
+        if (GameIsWIN) //Р·Р°РјРµРЅРёРј С‚РµРєСЃ РЅР° РїРѕР±РµРґРЅС‹Р№ РµСЃР»Рё РёРіСЂРѕРє РІС‹РёРіСЂР°Р»
         {
-            textGameOverTMP.text = "ПОБЕДА!!!";
+            textGameOverTMP.text = "РџРћР‘Р•Р”Рђ!!!";
             
         }
-        else // текст поражения если игрок проиграл
+        else // С‚РµРєСЃС‚ РїРѕСЂР°Р¶РµРЅРёСЏ РµСЃР»Рё РёРіСЂРѕРє РїСЂРѕРёРіСЂР°Р»
         {
-            textGameOverTMP.text = "GAME OVER, ты проиграл...";
+            textGameOverTMP.text = "GAME OVER, С‚С‹ РїСЂРѕРёРіСЂР°Р»...";
         }
-        // Нажатие на ESC вызывает меню в игре, активируя обьекты на UI канвасе
+        // РќР°Р¶Р°С‚РёРµ РЅР° ESC РІС‹Р·С‹РІР°РµС‚ РјРµРЅСЋ РІ РёРіСЂРµ, Р°РєС‚РёРІРёСЂСѓСЏ РѕР±СЊРµРєС‚С‹ РЅР° UI РєР°РЅРІР°СЃРµ
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            escapeVisible = !escapeVisible; // escapeVisible - флаг видимости меню ESC
+            escapeVisible = !escapeVisible; // escapeVisible - С„Р»Р°Рі РІРёРґРёРјРѕСЃС‚Рё РјРµРЅСЋ ESC
 
             escapeMenuGO.SetActive(escapeVisible);
             if (escapeVisible)
             {
-                Time.timeScale = 0; // поставим игру на паузу, пока показывается ESC меню
+                Time.timeScale = 0; // РїРѕСЃС‚Р°РІРёРј РёРіСЂСѓ РЅР° РїР°СѓР·Сѓ, РїРѕРєР° РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ ESC РјРµРЅСЋ
             }
-            else Time.timeScale = timeScaleActual; // пауза выключена, игра продолжается
+            else Time.timeScale = timeScaleActual; // РїР°СѓР·Р° РІС‹РєР»СЋС‡РµРЅР°, РёРіСЂР° РїСЂРѕРґРѕР»Р¶Р°РµС‚СЃСЏ
         }
-        // здесь снимается стартовый текст по нажатию на любую клавишу 
+        // Р·РґРµСЃСЊ СЃРЅРёРјР°РµС‚СЃСЏ СЃС‚Р°СЂС‚РѕРІС‹Р№ С‚РµРєСЃС‚ РїРѕ РЅР°Р¶Р°С‚РёСЋ РЅР° Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ 
         if (Input.anyKeyDown &&startingTxt.activeSelf==true)
         {
-            if (Input.GetKeyDown(KeyCode.Escape)) // если эта любая клавиша стала клавишей ESC, то мы должнв не продолжить игру а поставить на паузу сразу как она начнется.
+            if (Input.GetKeyDown(KeyCode.Escape)) // РµСЃР»Рё СЌС‚Р° Р»СЋР±Р°СЏ РєР»Р°РІРёС€Р° СЃС‚Р°Р»Р° РєР»Р°РІРёС€РµР№ ESC, С‚Рѕ РјС‹ РґРѕР»Р¶РЅРІ РЅРµ РїСЂРѕРґРѕР»Р¶РёС‚СЊ РёРіСЂСѓ Р° РїРѕСЃС‚Р°РІРёС‚СЊ РЅР° РїР°СѓР·Сѓ СЃСЂР°Р·Сѓ РєР°Рє РѕРЅР° РЅР°С‡РЅРµС‚СЃСЏ.
             {
                 Time.timeScale = 0; 
                 escapeMenuGO.SetActive(escapeVisible);
                 startingTxt.SetActive(false);
                 return;
             }
-            startingTxt.SetActive( false); // запустим игру и уберем стартовый текст.
+            startingTxt.SetActive( false); // Р·Р°РїСѓСЃС‚РёРј РёРіСЂСѓ Рё СѓР±РµСЂРµРј СЃС‚Р°СЂС‚РѕРІС‹Р№ С‚РµРєСЃС‚.
             Time.timeScale = timeScaleActual;
         }
-        //---------- отрисовка UI ----------//
+        //---------- РѕС‚СЂРёСЃРѕРІРєР° UI ----------//
         playerLivesTMP.text= "PLAYER LIVES x "+ basketScript.playerLives;
         bossLivesTMP.text = "BOSS LIVES x "+ appleTreeScript.lives;
     }
-    public void Restart() // кнопка Рестарт из меню ESC
-    {   // Перезагрузим сцену
+    public void Restart() // РєРЅРѕРїРєР° Р РµСЃС‚Р°СЂС‚ РёР· РјРµРЅСЋ ESC
+    {   // РџРµСЂРµР·Р°РіСЂСѓР·РёРј СЃС†РµРЅСѓ
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         escapeVisible = false;
         Time.timeScale = timeScaleActual;
     }
     public void ExitApplication()
-    {   //выход из игры в рабочий стол
+    {   //РІС‹С…РѕРґ РёР· РёРіСЂС‹ РІ СЂР°Р±РѕС‡РёР№ СЃС‚РѕР»
         Application.Quit();
-        Debug.Log("Вы вышли из игры");
+        Debug.Log("Р’С‹ РІС‹С€Р»Рё РёР· РёРіСЂС‹");
     }
     public void Rescume()
-    {   //снимает с паузы
+    {   //СЃРЅРёРјР°РµС‚ СЃ РїР°СѓР·С‹
         escapeVisible = false;
         escapeMenuGO.SetActive(escapeVisible);
         Time.timeScale = timeScaleActual;
