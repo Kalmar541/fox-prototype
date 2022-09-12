@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppleTree : MonoBehaviour
+public class Boss : MonoBehaviour
 {  
     
     public GameObject applePrefab;                  //шаблон создания яблок
@@ -102,7 +102,7 @@ public class AppleTree : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) // считает попадания бомб которые откинули
     {
-        if (other.gameObject.tag == "Apple" && other.gameObject.GetComponent<Apple>().is_activateExplousion == true)
+        if (other.gameObject.tag == "Apple" && other.gameObject.GetComponent<Bomb>().is_activateExplousion == true)
         {
             lives--;
             Vector3 tempPos=other.transform.position ;

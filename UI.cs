@@ -15,7 +15,7 @@ public class UI : MonoBehaviour
     public GameObject player;
     public GameObject bossGO;
     public PlayerController basketScript;
-    public AppleTree appleTreeScript;
+    public Boss appleTreeScript;
     public AudioBank auduoBankScript;
     
     public GameObject startingTxt;   // текст при старте игры, описывающий элементы управления
@@ -32,7 +32,7 @@ public class UI : MonoBehaviour
         timeScaleActual = Time.timeScale;
         Time.timeScale = 0; // даем игроку прочитать стартовый текст, игра на паузе
         basketScript = player.GetComponent<PlayerController>();
-        appleTreeScript = bossGO.GetComponent<AppleTree>();
+        appleTreeScript = bossGO.GetComponent<Boss>();
         auduoBankScript = GetComponent<AudioBank>();
 
 
