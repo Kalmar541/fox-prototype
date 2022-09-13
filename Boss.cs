@@ -22,6 +22,7 @@ public class Boss : MonoBehaviour
     public float speed = 1f;
     public float leftAndRightEdge = 10f;            //растояние на котором должноизменяться направление движения яблони 
     public float chanceToChangeDirections = 0.1f;   //вероятность случайного изменения движения   
+    
     public float secondsBetweenDropApple = 2f;      //частота сброса яблок
     public int lives=1;
 
@@ -48,6 +49,10 @@ public class Boss : MonoBehaviour
         Vector3 posBosGO = transform.position;
         posBosGO.x += speed * Time.deltaTime;
         transform.position = posBosGO;
+        if (lives<0)
+        {
+            lives = 0;
+        }
         if (lives < 1)
         {
             BossIsDead = true;
@@ -66,7 +71,7 @@ public class Boss : MonoBehaviour
         }
         else
         {
-            MoveBossDown(11); // опустим нового BOSS до уровня игрока
+            MoveBossDown(10); // опустим нового BOSS до уровня игрока
             
         }
         
@@ -110,17 +115,18 @@ public class Boss : MonoBehaviour
         {
             case 2:
                 speed = 8;
-                lives = 10;
+                lives = 7;
                 secondsBetweenDropApple = 3;
                 sprite.sprite = sprites[1];
                 AB.audioSource.pitch = 0.95f;
+                Camera.main.GetComponent<UI>().chanceAttackSuriken = 0.002f;  
                 break;
             case 3:
-                speed = 12;
-                lives = 15;
-                secondsBetweenDropApple = 2;
+                speed = 10;
+                lives = 10;
+                secondsBetweenDropApple = 2.5f;
                 sprite.sprite = sprites[2];
-                
+                Camera.main.GetComponent<UI>().chanceAttackSuriken = 0.004f;
                 AB.audioSource.pitch = 1f;
                 break;
             case 4:
@@ -144,10 +150,7 @@ public class Boss : MonoBehaviour
         {            
             pos.y -= 5 * Time.deltaTime;
             transform.position = pos;
-            if (BossIsDead)
-            {
-
-            }
+     
         }
         else if(BossIsDead)
         {

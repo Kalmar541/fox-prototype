@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         ChangeAnimations();
 
         //----ввод клавиш, управление-----
-        if (Input.GetKeyDown(KeyCode.UpArrow)&&is_ground)
+        if (Input.GetKeyDown(KeyCode.Space)&&is_ground)
         {
             float jumpForce = /*Mathf.Sqrt(*/jumpForceTest * -2 * Physics.gravity.y/*)*/;
             rb.AddForce(new Vector3(0, jumpForce, 0));
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         if (isJump)
         {
             timeJump += Time.deltaTime;
-            if (Input.GetKeyUp(KeyCode.UpArrow))
+            if (Input.GetKeyUp(KeyCode.Space))
             {
                 jumpCancelled = true;
             }
@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
     {
         MoveHorizontal();
      //------ввод клавиш-----
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.Space))
         {        
             if (!is_ground)
             {

@@ -19,6 +19,13 @@ public class UI : MonoBehaviour
     public GameObject escapeMenuGO;  // группа меню паузы с кпопками выхода рестарта и возврата
     public GameObject player;
     public GameObject bossGO;
+    public GameObject leftWarn;
+    public GameObject rightWarn;
+    public GameObject redBomb;
+    public GameObject surikenGO;
+
+    public float chanceAttackSuriken = 0.001f; // 0.005 -3  0.0025 -2 0.001 -3
+
     public PlayerController basketScript;
     public Boss appleTreeScript;
     public AudioBank auduoBankScript;
@@ -40,7 +47,8 @@ public class UI : MonoBehaviour
         appleTreeScript = bossGO.GetComponent<Boss>();
         auduoBankScript = GetComponent<AudioBank>();
 
-
+        //StartCoroutine(MigatTablichkoi(derect.Left));
+        
 
     }
 
@@ -85,6 +93,20 @@ public class UI : MonoBehaviour
         playerLivesTMP.text= "PLAYER LIVES x "+ basketScript.playerLives;
         bossLivesTMP.text = "BOSS LIVES x "+ appleTreeScript.lives;
     }
+    void FixedUpdate()
+    {
+        
+        if (Random.value < chanceAttackSuriken)
+        {
+            float rand = Random.value;
+            if (Random.value<0.5)
+            {
+                StartCoroutine(MigatTablichkoi(derect.Left));
+            } else StartCoroutine(MigatTablichkoi(derect.Rigth));
+
+
+        }
+    }
     public void Restart() // кнопка Рестарт из меню ESC
     {   // Перезагрузим сцену
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -102,5 +124,53 @@ public class UI : MonoBehaviour
         escapeMenuGO.SetActive(escapeVisible);
         Time.timeScale = timeScaleActual;
     }
+    public enum derect { Left,Rigth}
+    
+    
+    IEnumerator MigatTablichkoi(derect dir)
+    {
+        GameObject SO;
+        Vector3 pos;
+        switch (dir)
+        {
+            
+            case derect.Left:
+                leftWarn.SetActive(true);
+                yield return new WaitForSeconds(0.5f);
+                leftWarn.SetActive(false);
+                yield return new WaitForSeconds(0.5f);
+                leftWarn.SetActive(true);
+                yield return new WaitForSeconds(0.5f);
+                leftWarn.SetActive(false);
+                yield return new WaitForSeconds(0.5f);
+                leftWarn.SetActive(true);
+                yield return new WaitForSeconds(0.5f);
+                leftWarn.SetActive(false);
+                SO= Instantiate(surikenGO);
+                SO.transform.position = leftWarn.transform.position; ;
+
+                break;
+            case derect.Rigth:
+                rightWarn.SetActive(true);
+                yield return new WaitForSeconds(0.5f);
+                rightWarn.SetActive(false);
+                yield return new WaitForSeconds(0.5f);
+                rightWarn.SetActive(true);
+                yield return new WaitForSeconds(0.5f);
+                rightWarn.SetActive(false);
+                yield return new WaitForSeconds(0.5f);
+                rightWarn.SetActive(true);
+                yield return new WaitForSeconds(0.5f);
+                rightWarn.SetActive(false);
+                SO = Instantiate(surikenGO);
+                SO.transform.position = rightWarn.transform.position;
+                break;
+            default:
+                break;
+        }
+        
+        
+    }
+    
     
 }
