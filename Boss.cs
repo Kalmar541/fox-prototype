@@ -24,10 +24,16 @@ public class Boss : MonoBehaviour
     public float chanceToChangeDirections = 0.1f;   //вероятность случайного изменения движения   
     public float secondsBetweenDropApple = 2f;      //частота сброса яблок
     public int lives=1;
+
     bool beginDownOnce = true;                      // флаг по которому BOSS падает вниз
+    bool BossIsDead = false;                        // Boss повержен, для запуска анимации уничтожения и спавна заново.
+
     public float timeOnChange = 1f;                 // таймер ожидания после смены движения
     public GameObject animExplousions;              // анимация взрывов
     public SpriteRenderer sprite;
+    public Sprite[] sprites;                //спрайты босса мин сред и большой
+    public int level = 1;                   // уровень игры задает хар-ки BOSS, сложность
+    public Vector3 posBosGO;
 
     void Start()
     {        
@@ -39,19 +45,31 @@ public class Boss : MonoBehaviour
     void Update()
     {           
         //простое перемещение
-        Vector3 pos = transform.position;
-        pos.x += speed * Time.deltaTime;
-        
+        Vector3 posBosGO = transform.position;
+        posBosGO.x += speed * Time.deltaTime;
+        transform.position = posBosGO;
         if (lives < 1)
         {
-            pos.y -=Mathf.Abs( speed) * Time.deltaTime;  
-            if ( beginDownOnce)
+            BossIsDead = true;
+            MoveBossDown(-22);        // спустим BOSS за сцену, у него кончились жизни 
+            if (BossIsDead)
             {
-                AnimBossDead(); // сработает 1 раз
-                beginDownOnce = false;
-            }            
+                if (beginDownOnce)
+                {
+                    AnimBossDead(); // сработает 1 раз
+                    beginDownOnce = false;
+                    CancelInvoke("DropApple"); // прекратить сброс бомб
+                }
+                
+            }
+                
         }
-        transform.position = pos;
+        else
+        {
+            MoveBossDown(11); // опустим нового BOSS до уровня игрока
+            
+        }
+        
         //изменение направления, с ожиданием задержки, что бы обьект не дергался сразу после
         //смены направления если шанс смены направления опять выпал
         if (timeOnChange>0)
@@ -60,12 +78,12 @@ public class Boss : MonoBehaviour
         }
         
         //BOSS двигается влево и вправо пока не достигнет крайних на экране позиций, после чего разворачивается
-        if (pos.x < -leftAndRightEdge&&timeOnChange<=0)
+        if (posBosGO.x < -leftAndRightEdge&&timeOnChange<=0)
         {           
             speed *=-1;
             timeOnChange = 1f;
         } 
-        if (pos.x > leftAndRightEdge && timeOnChange <= 0)
+        if (posBosGO.x > leftAndRightEdge && timeOnChange <= 0)
         {
             speed *= -1;       
             timeOnChange = 1f;
@@ -76,12 +94,6 @@ public class Boss : MonoBehaviour
         }
         else sprite.flipX = true;
 
-        if (transform.position.y<-20)
-        {
-            CancelInvoke("AnimBossDead");
-            Camera.main.GetComponent<UI>().restartMenuGO.SetActive(true);
-            Camera.main.GetComponent<UI>().GameIsWIN = true;
-        }
     }
     private void FixedUpdate()
     {
@@ -91,7 +103,67 @@ public class Boss : MonoBehaviour
 
         }
     }
-    
+    void SetDiffical(int level)
+    {
+        AudioBank AB = Camera.main.GetComponent<AudioBank>();
+        switch (level)
+        {
+            case 2:
+                speed = 8;
+                lives = 10;
+                secondsBetweenDropApple = 3;
+                sprite.sprite = sprites[1];
+                AB.audioSource.pitch = 0.95f;
+                break;
+            case 3:
+                speed = 12;
+                lives = 15;
+                secondsBetweenDropApple = 2;
+                sprite.sprite = sprites[2];
+                
+                AB.audioSource.pitch = 1f;
+                break;
+            case 4:
+                Camera.main.GetComponent<UI>().restartMenuGO.SetActive(true);
+                Camera.main.GetComponent<UI>().GameIsWIN = true;
+                gameObject.SetActive(false);
+                CancelInvoke("DropApple");
+                AB.audioSource.pitch = 0.9f;
+                break;
+
+
+        }
+    }
+    void MoveBossDown(float yPos)
+    //спускает BOSSа вниз до координаты yPos. Если Boss повержен BossIsDead(true), то ставит его над сценой,
+    //что бы снова плавно спустить до уровня над игроком.
+    {
+        Vector3 pos;
+        pos = transform.position;
+        if (transform.position.y > yPos)
+        {            
+            pos.y -= 5 * Time.deltaTime;
+            transform.position = pos;
+            if (BossIsDead)
+            {
+
+            }
+        }
+        else if(BossIsDead)
+        {
+           
+            CancelInvoke("AnimBossDead");
+            pos.y = 23;
+            transform.position = pos;
+            BossIsDead = false;
+            Invoke("DropApple", 2f);
+            level++;
+            SetDiffical(level);
+            beginDownOnce = true;
+
+        }
+        }
+  
     void DropApple()
     {
         GameObject apple = Instantiate<GameObject>(bombPrefab);
@@ -103,7 +175,7 @@ public class Boss : MonoBehaviour
     
      void AnimBossDead() { //спавнит взрывы вокруг BOSSа когда он уничтожен
 
-        CancelInvoke("DropApple"); // прекратить сброс бомб
+        
         Vector3 centrPoint = transform.position;     // позиция в которой находится BOSS  
         float radius = 4; // радиус разброса анимаций взрывов
         //выбрать точку анимации взрыва вокруг BOSSа

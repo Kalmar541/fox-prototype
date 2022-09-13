@@ -12,7 +12,7 @@ public class AudioBank : MonoBehaviour
     public AudioClip soundEndWon;
     public AudioClip GameSound;
     public AudioClip soundPlayerFall;
-    AudioSource audioSource;
+    public AudioSource audioSource;
     bool wonSoundIsPlay = false;
     public float time;
     UI uiScript;
