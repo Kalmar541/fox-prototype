@@ -94,17 +94,15 @@ public class UI : MonoBehaviour
         bossLivesTMP.text = "BOSS LIVES x "+ appleTreeScript.lives;
     }
     void FixedUpdate()
-    {
-        
-        if (Random.value < chanceAttackSuriken)
+    {       
+        if (Random.value < chanceAttackSuriken) 
         {
-            float rand = Random.value;
+            countSuriken++;
             if (Random.value<0.5)
             {
+                
                 StartCoroutine(MigatTablichkoi(derect.Left));
             } else StartCoroutine(MigatTablichkoi(derect.Rigth));
-
-
         }
     }
     public void Restart() // кнопка Рестарт из меню ESC
@@ -125,51 +123,52 @@ public class UI : MonoBehaviour
         Time.timeScale = timeScaleActual;
     }
     public enum derect { Left,Rigth}
-    
-    
+    public int countSuriken = 0;
+
     IEnumerator MigatTablichkoi(derect dir)
     {
-        GameObject SO;
-        Vector3 pos;
+        float second=0.25f;
+        GameObject surikenGO;
+        GameObject plate= leftWarn;    
+        int i = 8;
         switch (dir)
         {
-            
             case derect.Left:
-                leftWarn.SetActive(true);
-                yield return new WaitForSeconds(0.5f);
-                leftWarn.SetActive(false);
-                yield return new WaitForSeconds(0.5f);
-                leftWarn.SetActive(true);
-                yield return new WaitForSeconds(0.5f);
-                leftWarn.SetActive(false);
-                yield return new WaitForSeconds(0.5f);
-                leftWarn.SetActive(true);
-                yield return new WaitForSeconds(0.5f);
-                leftWarn.SetActive(false);
-                SO= Instantiate(surikenGO);
-                SO.transform.position = leftWarn.transform.position; ;
-
+                plate = leftWarn;
                 break;
             case derect.Rigth:
-                rightWarn.SetActive(true);
-                yield return new WaitForSeconds(0.5f);
-                rightWarn.SetActive(false);
-                yield return new WaitForSeconds(0.5f);
-                rightWarn.SetActive(true);
-                yield return new WaitForSeconds(0.5f);
-                rightWarn.SetActive(false);
-                yield return new WaitForSeconds(0.5f);
-                rightWarn.SetActive(true);
-                yield return new WaitForSeconds(0.5f);
-                rightWarn.SetActive(false);
-                SO = Instantiate(surikenGO);
-                SO.transform.position = rightWarn.transform.position;
+                plate = rightWarn;
                 break;
             default:
                 break;
+        }        
+        while (i > 0)
+        {
+           if (plate.activeSelf)
+           {
+               yield return new WaitForSeconds(second);
+               plate.SetActive(false);
+           }
+           else
+           {
+               yield return new WaitForSeconds(second);
+               plate.SetActive(true);
+           }
+            
+            i--;
         }
-        
-        
+        plate.SetActive(false);
+
+
+        while (countSuriken>0)
+        {
+            yield return new WaitForSeconds(1);
+            surikenGO = Instantiate(this.surikenGO);
+            surikenGO.transform.position = plate.transform.position;
+            countSuriken--;
+        }
+                /*surikenGO = Instantiate(this.surikenGO);
+                surikenGO.transform.position = plate.transform.position; */
     }
     
     

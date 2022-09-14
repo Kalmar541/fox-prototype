@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         ChangeAnimations();
 
         //----ввод клавиш, управление-----
-        if (Input.GetKeyDown(KeyCode.Space)&&is_ground)
+        if ((Input.GetKeyDown(KeyCode.Space) )/*|| Input.GetKeyDown(KeyCode.UpArrow))*/ && is_ground)
         {
             float jumpForce = /*Mathf.Sqrt(*/jumpForceTest * -2 * Physics.gravity.y/*)*/;
             rb.AddForce(new Vector3(0, jumpForce, 0));
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         if (isJump)
         {
             timeJump += Time.deltaTime;
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.Space) /*|| Input.GetKeyUp(KeyCode.UpArrow)*/)
             {
                 jumpCancelled = true;
             }
@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
     {
         MoveHorizontal();
      //------ввод клавиш-----
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space)/*||Input.GetKey(KeyCode.UpArrow)*/)
         {        
             if (!is_ground)
             {
@@ -141,20 +141,34 @@ public class PlayerController : MonoBehaviour
             sprite.flipX = false;
         }
     }
-    private void OnCollisionStay(Collision collision) // проверка на касание земли, для исключения двойного прыжка в вохдухе.
+    /*private void OnCollisionStay(Collision collision) // проверка на касание земли, для исключения двойного прыжка в вохдухе.
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            is_ground = true;
+            is_ground = true; // Испрвить: коллайдер не только низом но и боком качается земли и позволяет прыгать
+        }
+    }*/
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            is_ground = true; 
         }
     }
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            is_ground = false;
+        }
+    }
+    /*private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
             is_ground = false;
         }
-    }
+    }*/
 
 
 
