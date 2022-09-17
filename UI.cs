@@ -24,7 +24,7 @@ public class UI : MonoBehaviour
     public GameObject redBomb;
     public GameObject surikenGO;
 
-    public float chanceAttackSuriken = 0.001f; // 0.005 -3  0.0025 -2 0.001 -3
+    public float chanceAttackSuriken = 10; // шанс накопления сюрикена перед выстрелом в % раз в секунду
 
     public PlayerController basketScript;
     public Boss appleTreeScript;
@@ -38,6 +38,9 @@ public class UI : MonoBehaviour
     public bool GameIsWIN;           // флаг указывающий на победу в игре
     public bool escapeVisible;       // флаг видимости меню паузы
     float timeScaleActual;           // хранит скорость игры, что бы вернуть ее после паузы.
+
+    public enum direct { Left, Rigth } // определяет с какой стороны экрана будет выстрел сюрикеном
+    public int countSuriken = 0;  // количество сюрикенов будет накапливать перед выстрелом
     void Start()
     {
         escapeVisible = escapeMenuGO.activeSelf;
@@ -46,9 +49,7 @@ public class UI : MonoBehaviour
         basketScript = player.GetComponent<PlayerController>();
         appleTreeScript = bossGO.GetComponent<Boss>();
         auduoBankScript = GetComponent<AudioBank>();
-
-        //StartCoroutine(MigatTablichkoi(derect.Left));
-        
+        InvokeRepeating("Shoot", 10, 5);
 
     }
 
@@ -94,15 +95,10 @@ public class UI : MonoBehaviour
         bossLivesTMP.text = "BOSS LIVES x "+ appleTreeScript.lives;
     }
     void FixedUpdate()
-    {       
-        if (Random.value < chanceAttackSuriken) 
+    {   //  chanceAttackSuriken указывается в процентах для 1 секунды   
+        if (Random.value*100 < chanceAttackSuriken/50) 
         {
-            countSuriken++;
-            if (Random.value<0.5)
-            {
-                
-                StartCoroutine(MigatTablichkoi(derect.Left));
-            } else StartCoroutine(MigatTablichkoi(derect.Rigth));
+            countSuriken++;           
         }
     }
     public void Restart() // кнопка Рестарт из меню ESC
@@ -122,53 +118,62 @@ public class UI : MonoBehaviour
         escapeMenuGO.SetActive(escapeVisible);
         Time.timeScale = timeScaleActual;
     }
-    public enum derect { Left,Rigth}
-    public int countSuriken = 0;
-
-    IEnumerator MigatTablichkoi(derect dir)
+    void Shoot() // Выбрать с какой стороны экрана сделать выстрел сюрикенами
     {
-        float second=0.25f;
-        GameObject surikenGO;
-        GameObject plate= leftWarn;    
-        int i = 8;
-        switch (dir)
+        if (Random.value < 0.5)
         {
-            case derect.Left:
-                plate = leftWarn;
-                break;
-            case derect.Rigth:
-                plate = rightWarn;
-                break;
-            default:
-                break;
-        }        
-        while (i > 0)
-        {
-           if (plate.activeSelf)
-           {
-               yield return new WaitForSeconds(second);
-               plate.SetActive(false);
-           }
-           else
-           {
-               yield return new WaitForSeconds(second);
-               plate.SetActive(true);
-           }
-            
-            i--;
+            StartCoroutine(WarnAndShoot(direct.Left));
         }
-        plate.SetActive(false);
-
-
-        while (countSuriken>0)
+        else StartCoroutine(WarnAndShoot(direct.Rigth));
+    }
+    
+    
+    IEnumerator WarnAndShoot(direct dir)
+        //Предупреждает игрока миганием тамблички с края экрана, что будет выстрел сюрикенами.
+    {
+        if (countSuriken > 0) // не показывать табличку если стрелять нечем.
         {
-            yield return new WaitForSeconds(1);
-            surikenGO = Instantiate(this.surikenGO);
-            surikenGO.transform.position = plate.transform.position;
-            countSuriken--;
+            float second = 0.25f; // период времени между тем как табличка будет показана и спрятана, мигание
+            GameObject surikenGO;
+            GameObject plate = leftWarn;
+            int i = 8;
+            int surikenStack = countSuriken; // Собрать сюрикены в стак для выстрела и копить следующую партию
+            countSuriken = 0;
+            switch (dir) // помигает табличкой слева или справа перед выстрелом
+            {
+                case direct.Left:
+                    plate = leftWarn;
+                    break;
+                case direct.Rigth:
+                    plate = rightWarn;
+                    break;
+                default:
+                    break;
+            }
+            while (i > 0)
+            {
+                if (plate.activeSelf)
+                {
+                    yield return new WaitForSeconds(second);
+                    plate.SetActive(false);
+                }
+                else
+                {
+                    yield return new WaitForSeconds(second);
+                    plate.SetActive(true);
+                }
+                i--;
+            }
+            plate.SetActive(false);
+            while (surikenStack > 0) // пока все сюрикены ни будут выкинуты с задержкой 1 сек
+            {
+                surikenGO = Instantiate(this.surikenGO);
+                surikenGO.transform.position = plate.transform.position;
+                surikenStack--;
+                yield return new WaitForSeconds(1);
+            }
+
         }
-                /*surikenGO = Instantiate(this.surikenGO);
-                surikenGO.transform.position = plate.transform.position; */
     }
     
     
