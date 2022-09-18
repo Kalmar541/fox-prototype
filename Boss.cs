@@ -119,14 +119,14 @@ public class Boss : MonoBehaviour
                 secondsBetweenDropApple = 3;
                 sprite.sprite = sprites[1];
                 AB.audioSource.pitch = 0.95f;
-                Camera.main.GetComponent<UI>().chanceAttackSuriken = 0.002f;  
+                Camera.main.GetComponent<UI>().chanceAttackSuriken =15f;  
                 break;
             case 3:
                 speed = 10;
                 lives = 10;
                 secondsBetweenDropApple = 2.5f;
                 sprite.sprite = sprites[2];
-                Camera.main.GetComponent<UI>().chanceAttackSuriken = 0.004f;
+                Camera.main.GetComponent<UI>().chanceAttackSuriken =20f;
                 AB.audioSource.pitch = 1f;
                 break;
             case 4:
